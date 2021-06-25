@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  poto:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./data/:/app/data/
+    environment:
+        - POTO_ROOT=/poto
+        - POTO_DEFAULT=http://ricardkelly.com/
+        - POTO_DB=data/poto.db
+        - POTO_DEBUG=False

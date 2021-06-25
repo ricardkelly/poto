@@ -1,0 +1,4 @@
+flask
+flask_saml
+flask_principal
+uwsgi

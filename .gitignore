@@ -1,0 +1,5 @@
+.vscode
+app/metadata-idp.xml
+data/*
+app/data/*
+**/__pycache__

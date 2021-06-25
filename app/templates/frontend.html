@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <title>poto</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+ </head>
+ <body>
+   <div>
+    You are authenticated to the URL shortener as '{{ identity }}'. Please enter a URL to shorten, or delete an existing URL.
+    <form id="potoform" method="POST" action="{{ app_root }}">
+     Code: <input id="code" name="code" />&nbsp;
+     <span id="checkOkay" style="display: none; color: green;">&check;</span>
+     <span id="checkFail" style="color: red;">&cross;</span><br />
+     URL: <input id="url" name="url" /><br />
+     <input type="submit" value="Create" />
+    </form>
+  </div>
+  <ul id="existing">
+  {% for code in codes %}
+   <li><a href="{{ code.url }}">{{ code.code }} - {{ code.url }}</a>&nbsp;<a href="{{ app_root }}?op=delete&code={{ code.code }}">[delete]</a></li>
+  {% endfor %}
+  </ul>
+ <script>
+   $(document).ready(function(){
+     $("#code").keyup(function(){
+       $.ajax({
+         url : '{{ app_root }}',
+         type: 'GET',
+         data: { op: "check", code : $("#code").val() },
+         cache : false,
+         statusCode: {
+           200: function() { $('#checkOkay').css('display', 'none'); $('#checkFail').css('display', 'inline') },
+           204: function() { $('#checkOkay').css('display', 'inline'); $('#checkFail').css('display', 'none') },
+         }
+       });
+     });
+   }); 
+ </script>
+ </body>
+</html>
