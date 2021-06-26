@@ -19,13 +19,24 @@ def get_local_metadata(metadata_url):
 
 flask_saml._get_metadata = get_local_metadata
 
+
+# 
+# Make a random sequence of characters that can be used in a URL without expansion, or be the SECRET_KEY for the session storage
+# 
+def get_random_string(length):
+  from random import choice
+  from string import ascii_letters
+  s = ''.join(choice(ascii_letters) for i in range(length))
+  return s
+
+
 # 
 # Create a new Flask app and add bells and whistles of SAML2
 # 
 app = flask.Flask(__name__)
 principals = flask_principal.Principal(app)
 app.config.update({
-  'SECRET_KEY': '7989586047025868647956u4',
+  'SECRET_KEY': get_random_string(24),
   'SAML_METADATA_URL': IDP_URI,
 })
 saml = flask_saml.FlaskSAML(app)
@@ -72,15 +83,6 @@ def handle_permission_denied(error):
   else:
     return deny
 
-
-# 
-# Make a random sequence of characters that can be used in a URL without expansion
-# 
-def get_random_string(length):
-  from random import choice
-  from string import ascii_letters
-  s = ''.join(choice(ascii_letters) for i in range(length))
-  return s
 
 # 
 # Add the new mapping to the database, replacing code with a random string if it is already in use or is empty/invalid
